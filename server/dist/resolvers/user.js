@@ -84,7 +84,7 @@ let UserResolver = class UserResolver {
         return users;
     }
     /* Register user in the databse */
-    registerUser(loginInfo, { em }) {
+    registerUser(loginInfo, { em, req }) {
         return __awaiter(this, void 0, void 0, function* () {
             const hash = yield argon2_1.default.hash(loginInfo.password);
             /* Check that username is not already taken */
@@ -102,6 +102,7 @@ let UserResolver = class UserResolver {
                 password: hash
             });
             yield em.persistAndFlush(user);
+            req.session.userId = user.id;
             return { user };
         });
     }
