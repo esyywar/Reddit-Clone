@@ -56,6 +56,8 @@ const main = async () => {
         saveUninitialized: false
     })) 
 
+    console.log("Redis db connected!")
+
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
             resolvers: [HelloResolver, PostResolver, UserResolver],
