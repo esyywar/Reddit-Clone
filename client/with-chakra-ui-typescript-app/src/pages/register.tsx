@@ -7,13 +7,14 @@ import { Formik, Form } from "formik"
 
 import { Box, Button } from "@chakra-ui/react"
 
+import { useMutation } from 'urql'
+
 
 interface registerProps {}
 
-const Register: React.FC<registerProps> = ({}) => {
-    const makeUser = `
-        mutation RegisterUser($username: String!, $password: String!) {
-            registerUser(loginInfo: {username: $username, password: $password}) {
+const RegisterMut = `
+    mutation RegisterUser($username: String!, $password: String!) {
+        registerUser(loginInfo: {username: $username, password: $password}) {
             errors {
                 field
                 message
@@ -24,9 +25,12 @@ const Register: React.FC<registerProps> = ({}) => {
                 updatedAt
                 username
             }
-            }
         }
-    `
+    }
+`
+
+const Register: React.FC<registerProps> = ({}) => {
+    const [result, registerUser] = useMutation(RegisterMut)
 
     return (
         <Wrapper variant="small">
@@ -35,8 +39,9 @@ const Register: React.FC<registerProps> = ({}) => {
                     username: "",
                     password: ""
                 }}
-                onSubmit = {(values) => {
-                    console.log(values)
+                onSubmit = {async (values) => {
+                    const response = await registerUser({ username: values.username, password: values.password })
+                    console.log(response.data)
                 }}
             >
                 {({ isSubmitting }) => (
