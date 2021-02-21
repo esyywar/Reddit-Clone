@@ -89,7 +89,8 @@ let UserResolver = class UserResolver {
             const hash = yield argon2_1.default.hash(loginInfo.password);
             /* Check that username is not already taken */
             const isTaken = yield em.find(User_1.User, { username: loginInfo.username });
-            if (isTaken) {
+            /* If we do not get back em empty array -> ie. user already exists */
+            if (isTaken.length) {
                 return {
                     errors: [{
                             field: "username",

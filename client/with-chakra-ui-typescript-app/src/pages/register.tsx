@@ -11,6 +11,23 @@ import { Box, Button } from "@chakra-ui/react"
 interface registerProps {}
 
 const Register: React.FC<registerProps> = ({}) => {
+    const makeUser = `
+        mutation RegisterUser($username: String!, $password: String!) {
+            registerUser(loginInfo: {username: $username, password: $password}) {
+            errors {
+                field
+                message
+            }
+            user {
+                id
+                createdAt
+                updatedAt
+                username
+            }
+            }
+        }
+    `
+
     return (
         <Wrapper variant="small">
             <Formik

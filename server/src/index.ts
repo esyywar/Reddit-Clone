@@ -56,7 +56,7 @@ const main = async () => {
         saveUninitialized: false
     })) 
 
-    console.log("Redis db connected!")
+    console.log("Redis session db connected!")
 
     const apolloServer = new ApolloServer({
         schema: await buildSchema({
@@ -72,10 +72,10 @@ const main = async () => {
         res.send("Welcome to home route!")
     })
 
-    const PORT = constants.__prod ? process.env.PORT : 3000
+    const PORT = constants.__prod ? process.env.PORT : 5000
 
     app.listen(PORT, () => {
-        console.log("Server running!")
+        console.log(`Server running on ${PORT}!`)
     })
 }
 

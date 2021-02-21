@@ -71,7 +71,8 @@ export class UserResolver {
         /* Check that username is not already taken */
         const isTaken = await em.find(User, { username: loginInfo.username })
 
-        if (isTaken) {
+        /* If we do not get back em empty array -> ie. user already exists */
+        if (isTaken.length) {
             return {
                 errors: [{
                     field: "username",

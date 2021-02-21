@@ -74,6 +74,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         resave: false,
         saveUninitialized: false
     }));
+    console.log("Redis session db connected!");
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield type_graphql_1.buildSchema({
             resolvers: [hello_1.HelloResolver, post_1.PostResolver, user_1.UserResolver],
@@ -85,9 +86,9 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     app.get('/', (req, res) => {
         res.send("Welcome to home route!");
     });
-    const PORT = constants.__prod ? process.env.PORT : 3000;
+    const PORT = constants.__prod ? process.env.PORT : 5000;
     app.listen(PORT, () => {
-        console.log("Server running!");
+        console.log(`Server running on ${PORT}!`);
     });
 });
 main().catch(err => console.log(err));
