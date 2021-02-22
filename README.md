@@ -8,9 +8,17 @@ Following the [amazing tutorial by Ben Awad.](https://www.youtube.com/watch?v=I6
 
 ## Client
 
+### UI
+
 - Nextjs
 - Chakra UI
 - Formik
+
+### GraphQL
+
+- Urql
+- GraphQL codegen
+
 
 ## Server
 
