@@ -36,6 +36,7 @@ const core_1 = require("@mikro-orm/core");
 const mikro_orm_config_1 = __importDefault(require("./mikro-orm.config"));
 const redis_1 = __importDefault(require("redis"));
 const express_1 = __importDefault(require("express"));
+const cors_1 = __importDefault(require("cors"));
 const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const apollo_server_express_1 = require("apollo-server-express");
@@ -57,6 +58,11 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const RedisStore = connect_redis_1.default(express_session_1.default);
     /* Initialize express app */
     const app = express_1.default();
+    /* CORS validation middleware */
+    app.use(cors_1.default({
+        origin: "http://localhost:5000",
+        credentials: true
+    }));
     /* Create session middleware */
     app.use(express_session_1.default({
         name: "sid",
@@ -82,7 +88,11 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         }),
         context: ({ req, res }) => ({ em: orm.em, req, res })
     });
-    apolloServer.applyMiddleware({ app });
+    /* CORS validation used in express-cors middleware so not needed here */
+    apolloServer.applyMiddleware({
+        app,
+        cors: false
+    });
     app.get('/', (req, res) => {
         res.send("Welcome to home route!");
     });

@@ -7,30 +7,15 @@ import { Formik, Form } from "formik"
 
 import { Box, Button } from "@chakra-ui/react"
 
-import { useMutation } from 'urql'
+import { useRegisterUserMutation } from "../generated/graphql"
+import { errorToMap } from "../utils/ErrorToMap"
 
 
 interface registerProps {}
 
-const RegisterMut = `
-    mutation RegisterUser($username: String!, $password: String!) {
-        registerUser(loginInfo: {username: $username, password: $password}) {
-            errors {
-                field
-                message
-            }
-            user {
-                id
-                createdAt
-                updatedAt
-                username
-            }
-        }
-    }
-`
 
 const Register: React.FC<registerProps> = ({}) => {
-    const [result, registerUser] = useMutation(RegisterMut)
+    const [, registerUser] = useRegisterUserMutation()
 
     return (
         <Wrapper variant="small">
@@ -39,9 +24,13 @@ const Register: React.FC<registerProps> = ({}) => {
                     username: "",
                     password: ""
                 }}
-                onSubmit = {async (values) => {
+                onSubmit = {async (values, { setErrors }) => {
                     const response = await registerUser({ username: values.username, password: values.password })
-                    console.log(response.data)
+                    
+                    if (response.data?.registerUser.errors) {
+                        const errMap = errorToMap(response.data.registerUser.errors)
+                        setErrors(errMap)
+                    }
                 }}
             >
                 {({ isSubmitting }) => (

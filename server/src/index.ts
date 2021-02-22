@@ -7,6 +7,8 @@ import redis from "redis"
 
 import express from "express"
 
+import cors from "cors"
+
 import session from "express-session"
 import connectRedis from "connect-redis"
 
@@ -38,6 +40,12 @@ const main = async () => {
     /* Initialize express app */
     const app = express()
 
+    /* CORS validation middleware */
+    app.use(cors({
+        origin: "http://localhost:5000",
+        credentials: true
+    }))
+
     /* Create session middleware */
     app.use(session({
         name: "sid",
@@ -66,7 +74,11 @@ const main = async () => {
         context: ({ req, res }): MyContext => ({ em: orm.em, req, res })
     })
 
-    apolloServer.applyMiddleware({ app })
+    /* CORS validation used in express-cors middleware so not needed here */
+    apolloServer.applyMiddleware({ 
+        app, 
+        cors: false 
+    })
 
     app.get('/', (req, res) => {
         res.send("Welcome to home route!")
